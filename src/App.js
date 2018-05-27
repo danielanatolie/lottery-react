@@ -32,7 +32,7 @@ class App extends Component {
           competing to win {web3.utils.fromWei(this.state.balance, 'ether')} ether.
         </p>
         <hr />
-        <form>
+        <form onSubmit={this.onSubmit}>
           <h4>Enter the Gamble: </h4>
           <div>
             <label>Amount of ether to enter</label>
@@ -46,6 +46,15 @@ class App extends Component {
       </div>
     );
   }
+
+  onSubmit = async (formSubmission) => {
+      formSubmission.preventDefault();
+      const accounts = await web3.eth.getAccounts();
+      await lottery.methods.enter().send({
+        from: accounts[0],
+        value: web3.utils.toWei(this.state.value, 'ether')
+      });
+  };
 }
 
 export default App;
